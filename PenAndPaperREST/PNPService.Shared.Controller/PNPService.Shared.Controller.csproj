@@ -60,8 +60,12 @@
       <Name>PNPService.Shared.Manager.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\PNPService.Shared.Models.Contracts\PNPService.Shared.Models.Contracts.csproj">
-      <Project>{313531a7-8e7b-48b5-8595-1cb8fd6c235b}</Project>
+      <Project>{313531A7-8E7B-48B5-8595-1CB8FD6C235B}</Project>
       <Name>PNPService.Shared.Models.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PNPService.Shared.Models\PNPService.Shared.Models.csproj">
+      <Project>{92bb5786-dbdc-4453-ab30-5847d1860b32}</Project>
+      <Name>PNPService.Shared.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
