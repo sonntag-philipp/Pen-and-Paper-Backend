@@ -11,6 +11,19 @@ namespace PNPService.Client.Windows
     {
         static void Main(string[] args)
         {
+            ConfigController c = new ConfigController();
+
+            c.Config.MySQL_ServerAddress = "localhost";
+            c.Config.MySQL_UserName = "pap_backend";
+            c.Config.MySQL_Password = "uwTXRR9Tgm7OSLEN";
+            c.Config.MySQL_Database = "pap_service";
+
+            MySQLController sc = new MySQLController();
+
+            sc.OpenConnection(c);
+
+            Console.ReadKey();
+
         }
     }
 }

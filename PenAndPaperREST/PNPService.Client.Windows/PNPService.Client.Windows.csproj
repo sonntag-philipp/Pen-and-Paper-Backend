@@ -49,6 +49,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PNPService.Shared.Controller.Contracts\PNPService.Shared.Controller.Contracts.csproj">
+      <Project>{c1a17ec9-0759-4134-93af-609f7cb1a7b6}</Project>
+      <Name>PNPService.Shared.Controller.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PNPService.Shared.Controller\PNPService.Shared.Controller.csproj">
       <Project>{603c896a-72ff-4cb8-81a1-edf92d659431}</Project>
       <Name>PNPService.Shared.Controller</Name>

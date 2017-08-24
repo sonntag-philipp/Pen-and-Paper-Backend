@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICharController.cs" />
     <Compile Include="IConfigController.cs" />
     <Compile Include="IMySQLController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
