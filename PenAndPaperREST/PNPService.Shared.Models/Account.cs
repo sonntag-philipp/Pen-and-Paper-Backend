@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace PNPService.Shared.Models
 {
-    public class Char : IChar
+    public class Account : IAccount
     {
+        public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }

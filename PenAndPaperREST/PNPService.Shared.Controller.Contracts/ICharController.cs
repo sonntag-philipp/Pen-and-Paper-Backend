@@ -1,4 +1,5 @@
 ﻿using PNPService.Shared.Models.Contracts;
+using PNPService.Shared.Models.Contracts.Char;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace PNPService.Shared.Controller.Contracts
 {
     public interface ICharController
     {
-        void AddChar(IChar character);
-        void RemoveChar();
-        void EditChar(IChar character);
+        ICharacter LoadCharacter(string characterName, IAccount account);
+        void RemoveCharacter(string characterName, IAccount account);
+        void SaveCharacter(ICharacter character, IAccount account);
     }
 }

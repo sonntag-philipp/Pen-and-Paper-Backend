@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace PNPService.Shared.Models.Contracts
 {
-    public interface IChar
+    public interface IAccount
     {
+        string Name { get; set; }
     }
 }
