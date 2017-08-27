@@ -9,9 +9,28 @@ namespace PNPService.Shared.Models.Char
 {
     public class Item : IItem
     {
-        public List<IEffect> ItemEffects { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Description { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool Equippable { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        private List<IEffect> _Effects;
+        public List<IEffect> Effects {
+            get { return _Effects; }
+            set { _Effects = value; }
+        }
+
+        private string _Name;
+        public string Name {
+            get { return _Name; }
+            set { _Name = value; }
+        }
+
+        private string _Description;
+        public string Description {
+            get { return _Description; }
+            set { _Description = value; }
+        }
+
+        private bool _Equippable;
+        public bool Equippable {
+            get { return _Equippable; }
+            set { _Equippable = value; }
+        }
     }
 }

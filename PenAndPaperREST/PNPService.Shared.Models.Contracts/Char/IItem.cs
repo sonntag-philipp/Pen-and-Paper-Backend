@@ -8,7 +8,7 @@ namespace PNPService.Shared.Models.Contracts.Char
 {
     public interface IItem
     {
-        List<IEffect> ItemEffects { get; set; }
+        List<IEffect> Effects { get; set; }
         
         string Name { get; set; }
         string Description { get; set; }

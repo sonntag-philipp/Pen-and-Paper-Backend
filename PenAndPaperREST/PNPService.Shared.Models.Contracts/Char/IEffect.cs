@@ -11,6 +11,6 @@ namespace PNPService.Shared.Models.Contracts.Char
         string Name { get; set; }
         string Description { get; set; }
         
-        int EffectStrength { get; set; }
+        int Strength { get; set; }
     }
 }

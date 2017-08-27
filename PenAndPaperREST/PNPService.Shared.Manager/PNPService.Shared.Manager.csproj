@@ -49,6 +49,10 @@
       <Project>{3a4aa925-a966-4d01-90c7-9ce8aa08df45}</Project>
       <Name>PNPService.Shared.Manager.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PNPService.Shared.Models.Contracts\PNPService.Shared.Models.Contracts.csproj">
+      <Project>{313531A7-8E7B-48B5-8595-1CB8FD6C235B}</Project>
+      <Name>PNPService.Shared.Models.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

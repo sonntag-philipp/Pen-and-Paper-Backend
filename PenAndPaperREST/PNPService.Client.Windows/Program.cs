@@ -11,7 +11,7 @@ namespace PNPService.Client.Windows
     {
         static void Main(string[] args)
         {
-            ConfigController c = new ConfigController();
+            /* ConfigController c = new ConfigController();
 
             c.Config.MySQL_ServerAddress = "localhost";
             c.Config.MySQL_UserName = "pap_backend";
@@ -22,7 +22,11 @@ namespace PNPService.Client.Windows
 
             sc.OpenConnection(c);
 
-            Console.ReadKey();
+            Console.ReadKey(); */
+
+            HTTPController httpController = new HTTPController();
+
+            httpController.StartListener();
 
         }
     }

@@ -40,8 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Char\ICharacter.cs" />
+    <Compile Include="Char\IEffect.cs" />
+    <Compile Include="Char\IItem.cs" />
+    <Compile Include="Char\ISkill.cs" />
     <Compile Include="IAccount.cs" />
-    <Compile Include="IChar.cs" />
     <Compile Include="IConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

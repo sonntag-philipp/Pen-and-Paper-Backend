@@ -9,6 +9,12 @@ namespace PNPService.Shared.Models
 {
     public class Account : IAccount
     {
-        public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        private string _Name;
+
+        public string Name {
+            get { return _Name; }
+            set { _Name = value; }
+        }
+
     }
 }

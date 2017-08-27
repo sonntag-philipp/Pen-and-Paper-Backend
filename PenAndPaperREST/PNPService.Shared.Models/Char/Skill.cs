@@ -9,9 +9,30 @@ namespace PNPService.Shared.Models.Char
 {
     public class Skill : ISkill
     {
-        public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Description { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public byte ThrowChance { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public List<IEffect> Effects { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        private string _Name;
+        public string Name {
+            get { return _Name; }
+            set { _Name = value; }
+        }
+
+
+        private string _Description;
+        public string Description {
+            get { return _Description; }
+            set { _Description = value; }
+        }
+
+
+        private byte _ThrowChance;
+        public byte ThrowChance {
+            get { return _ThrowChance; }
+            set { _ThrowChance = value; }
+        }
+
+        private List<IEffect> _Effects;
+        public List<IEffect> Effects {
+            get { return _Effects; }
+            set { _Effects = value; }
+        }
     }
 }

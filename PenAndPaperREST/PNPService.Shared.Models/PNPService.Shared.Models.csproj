@@ -40,7 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Char.cs" />
+    <Compile Include="Account.cs" />
+    <Compile Include="Char\Character.cs" />
+    <Compile Include="Char\Effect.cs" />
+    <Compile Include="Char\Item.cs" />
+    <Compile Include="Char\Skill.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
