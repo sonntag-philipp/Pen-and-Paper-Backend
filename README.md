@@ -1,2 +1,2 @@
 # PenAndPaperREST
-An REST-Api for the pan and paper web application.
+An REST-Api for the pen and paper web application.
