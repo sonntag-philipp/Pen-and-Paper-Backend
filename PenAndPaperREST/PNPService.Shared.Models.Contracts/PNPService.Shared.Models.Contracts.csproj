@@ -44,8 +44,10 @@
     <Compile Include="Char\IEffect.cs" />
     <Compile Include="Char\IItem.cs" />
     <Compile Include="Char\ISkill.cs" />
-    <Compile Include="IAccount.cs" />
+    <Compile Include="IAccountData.cs" />
     <Compile Include="IConfig.cs" />
+    <Compile Include="IMessage.cs" />
+    <Compile Include="IResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

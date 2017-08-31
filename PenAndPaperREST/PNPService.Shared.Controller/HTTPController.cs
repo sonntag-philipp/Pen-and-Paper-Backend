@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Threading;
 using System.IO;
+using Newtonsoft.Json;
+using PNPService.Shared.Models;
+using System.Dynamic;
 
 namespace PNPService.Shared.Controller
 {
@@ -22,16 +25,44 @@ namespace PNPService.Shared.Controller
 
         public void HandleRequest(HttpListenerContext context)
         {
-            context.Response.StatusCode = 200;
-            context.Response.SendChunked = true;
-
             Stream inputStream = context.Request.InputStream;
 
-            StreamReader reader = new StreamReader(inputStream, context.Request.ContentEncoding);
+            StreamReader streamReader = new StreamReader(context.Request.InputStream, context.Request.ContentEncoding);
 
-            string requestString = reader.ReadToEnd();
+            Message msg = JsonConvert.DeserializeObject<Message>(streamReader.ReadToEnd());
 
-            Console.WriteLine("Request: " + requestString);
+            switch (msg.Type)
+            {
+                case "login":
+
+                    //TODO: Make this better... wwwaayy better ^^
+                    Console.WriteLine("+Login by " + JsonConvert.DeserializeObject<AccountData>(msg.Content).Username);
+
+                    Guid g = Guid.NewGuid();
+                    string guidString = Convert.ToBase64String(g.ToByteArray());
+                    guidString = guidString.Replace("=", "");
+                    guidString = guidString.Replace("+", "");
+
+                    Console.WriteLine(guidString);
+
+                    dynamic responseObject = new ExpandoObject();
+
+                    responseObject.session_id = guidString;
+
+                    string responseString = JsonConvert.SerializeObject(responseObject);
+
+                    context.Response.StatusCode = 200;
+                    context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+
+                    byte[] buffer = Encoding.UTF8.GetBytes(responseString);
+                    context.Response.ContentLength64 = buffer.Length;
+                    context.Response.OutputStream.Write(buffer, 0, buffer.Length);
+
+                    context.Response.OutputStream.Close();
+                    context.Response.Close();
+
+                    break;
+            }
         }
 
 
@@ -40,8 +71,8 @@ namespace PNPService.Shared.Controller
         {
             Listener = new HttpListener();
 
-            Listener.Prefixes.Add("http://localhost:4200/");
-            Listener.Prefixes.Add("http://127.0.0.1:4200/");
+            Listener.Prefixes.Add("http://localhost:8080/");
+            Listener.Prefixes.Add("http://127.0.0.1:8080/");
 
             Listener.Start();
 

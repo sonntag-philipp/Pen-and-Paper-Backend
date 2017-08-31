@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace PNPService.Shared.Models.Contracts
 {
-    public interface IAccount
+    public interface IMessage
     {
-        string Name { get; set; }
+        string Type { get; set; }
+
+        string Content { get; set; }
     }
 }

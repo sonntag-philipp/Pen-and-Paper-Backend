@@ -20,13 +20,13 @@ namespace PNPService.Shared.Controller
         /// <param name="characterName">The name of the character.</param>
         /// <param name="account">The account that owns the character.</param>
         /// <returns>The loaded character/null if it was not found.</returns>
-        public ICharacter LoadCharacter(string characterName, IAccount account)
+        public ICharacter LoadCharacter(string characterName, IAccountData account)
         {
             try
             {
-                Character Char = JsonConvert.DeserializeObject<Character>(File.ReadAllText(@".\UserData\" + account.Name + @"\" + characterName + ".json"));
+                // Character Char = JsonConvert.DeserializeObject<Character>(File.ReadAllText(@".\UserData\" + account.Name + @"\" + characterName + ".json"));
 
-                return Char;
+                return null;
             }
             catch (Exception)
             {
@@ -42,11 +42,11 @@ namespace PNPService.Shared.Controller
         /// </summary>
         /// <param name="characterName">The name of the character to be removed.</param>
         /// <param name="account">The account that owns the character.</param>
-        public void RemoveCharacter(string characterName, IAccount account)
+        public void RemoveCharacter(string characterName, IAccountData account)
         {
             try
             {
-                File.Delete(@".\UserData\" + account.Name + @"\" + characterName +".json");
+                // File.Delete(@".\UserData\" + account.Name + @"\" + characterName +".json");
             }
             catch (Exception)
             {
@@ -60,11 +60,11 @@ namespace PNPService.Shared.Controller
         /// </summary>
         /// <param name="character">The character object to be saved.</param>
         /// <param name="account">The account the character should take place on.</param>
-        public void SaveCharacter(ICharacter character, IAccount account)
+        public void SaveCharacter(ICharacter character, IAccountData account)
         {
             try
             {
-                File.WriteAllText(@".\UserData\" + account.Name + @"\" + character.Name + ".json", JsonConvert.SerializeObject(character));
+                // File.WriteAllText(@".\UserData\" + account.Name + @"\" + character.Name + ".json", JsonConvert.SerializeObject(character));
             }
             catch (Exception)
             {

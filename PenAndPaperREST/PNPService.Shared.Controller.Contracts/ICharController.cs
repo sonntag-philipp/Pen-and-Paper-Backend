@@ -10,8 +10,8 @@ namespace PNPService.Shared.Controller.Contracts
 {
     public interface ICharController
     {
-        ICharacter LoadCharacter(string characterName, IAccount account);
-        void RemoveCharacter(string characterName, IAccount account);
-        void SaveCharacter(ICharacter character, IAccount account);
+        ICharacter LoadCharacter(string characterName, IAccountData account);
+        void RemoveCharacter(string characterName, IAccountData account);
+        void SaveCharacter(ICharacter character, IAccountData account);
     }
 }

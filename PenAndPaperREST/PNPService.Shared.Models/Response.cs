@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace PNPService.Shared.Models
 {
-    public class Account : IAccount
+    public class Response : IResponse
     {
-        private string _Name;
+        private string _JsonData;
 
-        public string Name {
-            get { return _Name; }
-            set { _Name = value; }
+        public string JsonData {
+            get { return _JsonData; }
+            set { _JsonData = value; }
         }
-
     }
 }
