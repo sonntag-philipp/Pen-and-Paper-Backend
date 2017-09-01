@@ -8,10 +8,9 @@ namespace PNPService.Shared.Controller.Contracts
 {
     public interface IMySQLController
     {
-        void OpenConnection(IConfigController Config);
-        void CloseConnection();
-        void DoNonQuery();
+        void Close();
+        void DoNonQuery(string SQL);
         
-        string DoQuery();
+        string DoQuery(string SQL);
     }
 }

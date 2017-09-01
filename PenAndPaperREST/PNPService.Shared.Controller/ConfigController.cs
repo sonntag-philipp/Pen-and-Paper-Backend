@@ -14,6 +14,15 @@ namespace PNPService.Shared.Controller
     public class ConfigController : IConfigController
     {
         /// <summary>
+        /// Constructor with automatic config reading, so that you can easily use this class.
+        /// </summary>
+        public ConfigController()
+        {
+            ReadFile();
+        }
+
+
+        /// <summary>
         /// The object that stores all the config data.
         /// </summary>
         public IConfig Config {

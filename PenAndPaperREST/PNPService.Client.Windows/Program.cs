@@ -11,23 +11,18 @@ namespace PNPService.Client.Windows
     {
         static void Main(string[] args)
         {
-            /* ConfigController c = new ConfigController();
+            MySQLController sc = new MySQLController(new ConfigController());
+            
+            string query = @"SELECT `session_id` FROM `session_ids` WHERE `identifier` = '1'";
 
-            c.Config.MySQL_ServerAddress = "localhost";
-            c.Config.MySQL_UserName = "pap_backend";
-            c.Config.MySQL_Password = "uwTXRR9Tgm7OSLEN";
-            c.Config.MySQL_Database = "pap_service";
 
-            MySQLController sc = new MySQLController();
+            Console.WriteLine(sc.DoQuery(query));
+            sc.Close();
 
-            sc.OpenConnection(c);
-
-            Console.ReadKey(); */
 
             HTTPController httpController = new HTTPController();
 
             httpController.StartListener();
-
         }
     }
 }

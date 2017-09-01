@@ -1,4 +1,5 @@
-﻿using PNPService.Shared.Models.Contracts.Char;
+﻿using PNPService.Shared.Controller.Contracts;
+using PNPService.Shared.Models.Contracts.Char;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,10 @@ namespace PNPService.Shared.Manager.Contracts
 {
     public interface IAccountManager
     {
-        bool ExecuteLogin(string accountName, string accountPass);
+        IMySQLController DBController { get; set; }
+
+        string Login(string accountName, string accountPass);
+        void Logout(string session_id);
 
         List<ICharacter> FetchAccountCharacters(string accountName);
     }

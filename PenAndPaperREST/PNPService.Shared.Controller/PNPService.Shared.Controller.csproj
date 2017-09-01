@@ -57,10 +57,6 @@
       <Project>{c1a17ec9-0759-4134-93af-609f7cb1a7b6}</Project>
       <Name>PNPService.Shared.Controller.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PNPService.Shared.Manager.Contracts\PNPService.Shared.Manager.Contracts.csproj">
-      <Project>{3a4aa925-a966-4d01-90c7-9ce8aa08df45}</Project>
-      <Name>PNPService.Shared.Manager.Contracts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PNPService.Shared.Models.Contracts\PNPService.Shared.Models.Contracts.csproj">
       <Project>{313531A7-8E7B-48B5-8595-1CB8FD6C235B}</Project>
       <Name>PNPService.Shared.Models.Contracts</Name>

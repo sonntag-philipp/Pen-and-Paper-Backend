@@ -35,32 +35,43 @@ namespace PNPService.Shared.Controller
             {
                 case "login":
 
-                    //TODO: Make this better... wwwaayy better ^^
+                    //TODO: This is so chaotic, but it works :/ Make this better
                     Console.WriteLine("+Login by " + JsonConvert.DeserializeObject<AccountData>(msg.Content).Username);
 
-                    Guid g = Guid.NewGuid();
-                    string guidString = Convert.ToBase64String(g.ToByteArray());
-                    guidString = guidString.Replace("=", "");
-                    guidString = guidString.Replace("+", "");
+                    AccountData data = JsonConvert.DeserializeObject<AccountData>(msg.Content);
 
-                    Console.WriteLine(guidString);
+                    Console.WriteLine(data.Username + "   " + data.Password);
 
-                    dynamic responseObject = new ExpandoObject();
+                    MySQLController sqlController = new MySQLController(new ConfigController());
 
-                    responseObject.session_id = guidString;
+                    if (sqlController.DoQuery(@"SELECT `identifier` FROM `user_data` WHERE `username` = '" + data.Username + "' AND `password` = '" + data.Password + "'") != "")
+                    {
+                        Guid g = Guid.NewGuid();
+                        string guidString = Convert.ToBase64String(g.ToByteArray());
+                        guidString = guidString.Replace("=", "");
+                        guidString = guidString.Replace("+", "");
+                        
 
-                    string responseString = JsonConvert.SerializeObject(responseObject);
+                        new MySQLController(new ConfigController()).DoQuery(@"INSERT INTO `session_ids`(`session_id`) VALUES ('" + guidString + "')");
 
-                    context.Response.StatusCode = 200;
-                    context.Response.AddHeader("Access-Control-Allow-Origin", "*");
 
-                    byte[] buffer = Encoding.UTF8.GetBytes(responseString);
-                    context.Response.ContentLength64 = buffer.Length;
-                    context.Response.OutputStream.Write(buffer, 0, buffer.Length);
 
-                    context.Response.OutputStream.Close();
-                    context.Response.Close();
+                        dynamic responseObject = new ExpandoObject();
 
+                        responseObject.session_id = guidString;
+
+                        string responseString = JsonConvert.SerializeObject(responseObject);
+
+                        context.Response.StatusCode = 200;
+                        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+
+                        byte[] buffer = Encoding.UTF8.GetBytes(responseString);
+                        context.Response.ContentLength64 = buffer.Length;
+                        context.Response.OutputStream.Write(buffer, 0, buffer.Length);
+
+                        context.Response.OutputStream.Close();
+                        context.Response.Close();
+                    }
                     break;
             }
         }
