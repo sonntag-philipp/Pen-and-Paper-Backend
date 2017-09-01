@@ -40,7 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAccountManager.cs" />
     <Compile Include="ICharManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

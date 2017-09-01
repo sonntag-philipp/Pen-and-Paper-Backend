@@ -25,8 +25,6 @@ namespace PNPService.Shared.Controller
 
         public void HandleRequest(HttpListenerContext context)
         {
-            Stream inputStream = context.Request.InputStream;
-
             StreamReader streamReader = new StreamReader(context.Request.InputStream, context.Request.ContentEncoding);
 
             Message msg = JsonConvert.DeserializeObject<Message>(streamReader.ReadToEnd());
@@ -34,46 +32,29 @@ namespace PNPService.Shared.Controller
             switch (msg.Type)
             {
                 case "login":
-
-                    //TODO: This is so chaotic, but it works :/ Make this better
-                    Console.WriteLine("+Login by " + JsonConvert.DeserializeObject<AccountData>(msg.Content).Username);
-
-                    AccountData data = JsonConvert.DeserializeObject<AccountData>(msg.Content);
-
-                    Console.WriteLine(data.Username + "   " + data.Password);
-
-                    MySQLController sqlController = new MySQLController(new ConfigController());
-
-                    if (sqlController.DoQuery(@"SELECT `identifier` FROM `user_data` WHERE `username` = '" + data.Username + "' AND `password` = '" + data.Password + "'") != "")
-                    {
-                        Guid g = Guid.NewGuid();
-                        string guidString = Convert.ToBase64String(g.ToByteArray());
-                        guidString = guidString.Replace("=", "");
-                        guidString = guidString.Replace("+", "");
-                        
-
-                        new MySQLController(new ConfigController()).DoQuery(@"INSERT INTO `session_ids`(`session_id`) VALUES ('" + guidString + "')");
-
-
-
-                        dynamic responseObject = new ExpandoObject();
-
-                        responseObject.session_id = guidString;
-
-                        string responseString = JsonConvert.SerializeObject(responseObject);
-
-                        context.Response.StatusCode = 200;
-                        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
-
-                        byte[] buffer = Encoding.UTF8.GetBytes(responseString);
-                        context.Response.ContentLength64 = buffer.Length;
-                        context.Response.OutputStream.Write(buffer, 0, buffer.Length);
-
-                        context.Response.OutputStream.Close();
-                        context.Response.Close();
-                    }
+                    AccountData userData = JsonConvert.DeserializeObject<AccountData>(msg.Content);
+                    
+                    dynamic responseContent = new ExpandoObject();
+                    responseContent.session_id = new SessionController().GenerateSessionID(userData.Username, userData.Password);
+                    
+                    WriteResponse(ref context, responseContent);
                     break;
             }
+        }
+
+        private void WriteResponse(ref HttpListenerContext ctx, ExpandoObject responseContent)
+        {
+            string responseString = JsonConvert.SerializeObject(responseContent);
+
+            ctx.Response.StatusCode = 200;
+            ctx.Response.AddHeader("Access-Control-Allow-Origin", "*");
+
+            byte[] buffer = Encoding.UTF8.GetBytes(responseString);
+            ctx.Response.ContentLength64 = buffer.Length;
+            ctx.Response.OutputStream.Write(buffer, 0, buffer.Length);
+
+            ctx.Response.OutputStream.Close();
+            ctx.Response.Close();
         }
 
 
@@ -83,7 +64,6 @@ namespace PNPService.Shared.Controller
             Listener = new HttpListener();
 
             Listener.Prefixes.Add("http://localhost:8080/");
-            Listener.Prefixes.Add("http://127.0.0.1:8080/");
 
             Listener.Start();
 

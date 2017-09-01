@@ -11,17 +11,7 @@ namespace PNPService.Client.Windows
     {
         static void Main(string[] args)
         {
-            MySQLController sc = new MySQLController(new ConfigController());
-            
-            string query = @"SELECT `session_id` FROM `session_ids` WHERE `identifier` = '1'";
-
-
-            Console.WriteLine(sc.DoQuery(query));
-            sc.Close();
-
-
             HTTPController httpController = new HTTPController();
-
             httpController.StartListener();
         }
     }

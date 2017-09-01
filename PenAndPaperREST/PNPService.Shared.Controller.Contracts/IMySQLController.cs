@@ -9,8 +9,7 @@ namespace PNPService.Shared.Controller.Contracts
     public interface IMySQLController
     {
         void Close();
-        void DoNonQuery(string SQL);
         
-        string DoQuery(string SQL);
+        string DoQuery(string SQL, KeyValuePair<string, string>[] parameters);
     }
 }

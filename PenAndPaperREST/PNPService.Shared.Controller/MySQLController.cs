@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using PNPService.Shared.Controller.Contracts;
+using PNPService.Shared.Models.Contracts;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,44 +12,52 @@ namespace PNPService.Shared.Controller
 {
     public class MySQLController : IMySQLController
     {
-        private MySqlConnection _Connection;
+        private MySqlConnection _connection;
+        private MySqlDataReader _reader;
 
-        public MySQLController(IConfigController Config)
+        public MySQLController(IConfig Config)
         {
-            _Connection = new MySqlConnection(
-                "Server=" + Config.Config.MySQL_ServerAddress + ";" +
-                "Database=" + Config.Config.MySQL_Database + ";" +
-                "Uid=" + Config.Config.MySQL_UserName + ";" +
-                "Pwd=" + Config.Config.MySQL_Password + ";"
+            _connection = new MySqlConnection(
+                "Server=" + Config.MySQL_ServerAddress + ";" +
+                "Database=" + Config.MySQL_Database + ";" +
+                "Uid=" + Config.MySQL_UserName + ";" +
+                "Pwd=" + Config.MySQL_Password + ";"
             );
 
-            _Connection.Open();
+            _connection.Open();
+        }
+
+        ~MySQLController()
+        {
+            Close();
         }
 
         public void Close()
         {
-            _Connection.Close();
+            _reader.Close();
+            _connection.Close();
         }
 
-        public string DoQuery(string SQL)
+        public string DoQuery(string SQL, KeyValuePair<string, string>[] parameters)
         {
-            MySqlCommand cmd = new MySqlCommand(SQL, _Connection);
-
-            MySqlDataReader reader = cmd.ExecuteReader();
-            reader.Read();
             try
             {
-                return reader.GetString(0);
+                MySqlCommand cmd = new MySqlCommand(SQL, _connection);
+
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    cmd.Parameters.Add(new MySqlParameter(parameters[i].Key, parameters[i].Value));
+                }
+
+                _reader = cmd.ExecuteReader();
+                _reader.Read();
+
+                return _reader.GetString(0);
             }
             catch (Exception)
             {
                 return "";
             }
-        }
-
-        public void DoNonQuery(string SQL)
-        {
-            MySqlCommand cmd = new MySqlCommand(SQL, _Connection);
         }
     }
 }
