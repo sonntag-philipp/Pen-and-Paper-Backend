@@ -10,10 +10,5 @@ namespace PNPService.Shared.Controller.Contracts
     public interface IHTTPController
     {
         HttpListener Listener { get; set; }
-
-        void StartListener();
-        void StopListener();
-
-        void HandleRequest(HttpListenerContext context);
     }
 }

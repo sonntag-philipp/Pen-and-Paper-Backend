@@ -52,10 +52,15 @@ namespace PNPService.Shared.Controller
                 _reader = cmd.ExecuteReader();
                 _reader.Read();
 
-                return _reader.GetString(0);
+                string returnVal =  _reader.GetString(0);
+
+                _reader.Close();
+
+                return returnVal;
             }
             catch (Exception)
             {
+                _reader.Close();
                 return "";
             }
         }

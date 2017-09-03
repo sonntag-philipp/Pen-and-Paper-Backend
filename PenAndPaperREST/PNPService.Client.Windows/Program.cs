@@ -1,4 +1,4 @@
-﻿using PNPService.Shared.Controller;
+﻿using PNPService.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +11,8 @@ namespace PNPService.Client.Windows
     {
         static void Main(string[] args)
         {
-            HTTPController httpController = new HTTPController();
-            httpController.StartListener();
+            HTTPViewModel httpViewModel = new HTTPViewModel();
+            
         }
     }
 }

@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D8E79703-6396-4BAE-908B-0C2BBBC2FFD6}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>PNPService.Client.Windows</RootNamespace>
-    <AssemblyName>PNPService.Client.Windows</AssemblyName>
+    <ProjectGuid>{DAF09543-9A9B-4530-946B-6E14D7AE970A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PNPService.Shared.ViewModels.Contracts</RootNamespace>
+    <AssemblyName>PNPService.Shared.ViewModels.Contracts</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -42,36 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="IHTTPViewModel.cs" />
+    <Compile Include="ISessionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PNPService.Shared.Controller.Contracts\PNPService.Shared.Controller.Contracts.csproj">
       <Project>{c1a17ec9-0759-4134-93af-609f7cb1a7b6}</Project>
       <Name>PNPService.Shared.Controller.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PNPService.Shared.Controller\PNPService.Shared.Controller.csproj">
-      <Project>{603c896a-72ff-4cb8-81a1-edf92d659431}</Project>
-      <Name>PNPService.Shared.Controller</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PNPService.Shared.Manager\PNPService.Shared.Manager.csproj">
-      <Project>{4dd3525b-77ae-4de2-9c6b-c13c560de3d6}</Project>
-      <Name>PNPService.Shared.Manager</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PNPService.Shared.Models.Contracts\PNPService.Shared.Models.Contracts.csproj">
-      <Project>{313531A7-8E7B-48B5-8595-1CB8FD6C235B}</Project>
-      <Name>PNPService.Shared.Models.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PNPService.Shared.Models\PNPService.Shared.Models.csproj">
-      <Project>{92bb5786-dbdc-4453-ab30-5847d1860b32}</Project>
-      <Name>PNPService.Shared.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PNPService.Shared.ViewModels\PNPService.Shared.ViewModels.csproj">
-      <Project>{f573d70a-23ea-4a0f-a7a3-fd9a353ae054}</Project>
-      <Name>PNPService.Shared.ViewModels</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

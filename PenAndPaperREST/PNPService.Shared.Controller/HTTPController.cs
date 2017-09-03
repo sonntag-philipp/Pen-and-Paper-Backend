@@ -22,27 +22,44 @@ namespace PNPService.Shared.Controller
             set { _Listener = value; }
         }
 
+        // The delegate type that handles a request
+        public delegate void RequestHandle(HttpListenerContext ctx);
 
-        public void HandleRequest(HttpListenerContext context)
+        /// <summary>
+        /// Class that creates http listeners to listen for incoming api-requests.
+        /// </summary>
+        /// <param name="requestHandler">Void that handles a request.</param>
+        public HTTPController(RequestHandle requestHandler)
         {
-            StreamReader streamReader = new StreamReader(context.Request.InputStream, context.Request.ContentEncoding);
+            Listener = new HttpListener();
 
-            Message msg = JsonConvert.DeserializeObject<Message>(streamReader.ReadToEnd());
+            Listener.Prefixes.Add("http://localhost:8080/");
 
-            switch (msg.Type)
+            Thread listenerThread = new Thread(() => HandleLoop(requestHandler));
+
+            listenerThread.Start();
+        }
+
+        private void HandleLoop(RequestHandle requestHandle)
+        {
+            Listener.Start();
+
+            while (Listener.IsListening)
             {
-                case "login":
-                    AccountData userData = JsonConvert.DeserializeObject<AccountData>(msg.Content);
-                    
-                    dynamic responseContent = new ExpandoObject();
-                    responseContent.session_id = new SessionController().GenerateSessionID(userData.Username, userData.Password);
-                    
-                    WriteResponse(ref context, responseContent);
-                    break;
+                try
+                {
+                    HttpListenerContext context = Listener.GetContext();
+
+                    ThreadPool.QueueUserWorkItem(o => requestHandle(context));
+                }
+                catch (Exception)
+                {
+                    Listener.Stop();
+                }
             }
         }
 
-        private void WriteResponse(ref HttpListenerContext ctx, ExpandoObject responseContent)
+        static public void WriteResponse(ref HttpListenerContext ctx, ExpandoObject responseContent)
         {
             string responseString = JsonConvert.SerializeObject(responseContent);
 
@@ -55,36 +72,6 @@ namespace PNPService.Shared.Controller
 
             ctx.Response.OutputStream.Close();
             ctx.Response.Close();
-        }
-
-
-
-        public void StartListener()
-        {
-            Listener = new HttpListener();
-
-            Listener.Prefixes.Add("http://localhost:8080/");
-
-            Listener.Start();
-
-            while (Listener.IsListening)
-            {
-                try
-                {
-                    HttpListenerContext context = Listener.GetContext();
-
-                    ThreadPool.QueueUserWorkItem(o => HandleRequest(context));
-                }
-                catch (Exception)
-                {
-                    
-                }
-            }
-        }
-
-        public void StopListener()
-        {
-            Listener.Stop();
         }
     }
 }

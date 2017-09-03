@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PNPService.Shared.Models", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PNPService.Shared.Models.Contracts", "PNPService.Shared.Models.Contracts\PNPService.Shared.Models.Contracts.csproj", "{313531A7-8E7B-48B5-8595-1CB8FD6C235B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PNPService.Shared.ViewModels", "PNPService.Shared.ViewModels\PNPService.Shared.ViewModels.csproj", "{F573D70A-23EA-4A0F-A7A3-FD9A353AE054}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PNPService.Shared.ViewModels.Contracts", "PNPService.Shared.ViewModels.Contracts\PNPService.Shared.ViewModels.Contracts.csproj", "{DAF09543-9A9B-4530-946B-6E14D7AE970A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +59,14 @@ Global
 		{313531A7-8E7B-48B5-8595-1CB8FD6C235B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{313531A7-8E7B-48B5-8595-1CB8FD6C235B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{313531A7-8E7B-48B5-8595-1CB8FD6C235B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F573D70A-23EA-4A0F-A7A3-FD9A353AE054}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F573D70A-23EA-4A0F-A7A3-FD9A353AE054}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F573D70A-23EA-4A0F-A7A3-FD9A353AE054}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F573D70A-23EA-4A0F-A7A3-FD9A353AE054}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAF09543-9A9B-4530-946B-6E14D7AE970A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAF09543-9A9B-4530-946B-6E14D7AE970A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAF09543-9A9B-4530-946B-6E14D7AE970A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAF09543-9A9B-4530-946B-6E14D7AE970A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,5 +79,7 @@ Global
 		{3A4AA925-A966-4D01-90C7-9CE8AA08DF45} = {C37C162D-7218-4DCA-A864-20C9EAEF1165}
 		{92BB5786-DBDC-4453-AB30-5847D1860B32} = {C37C162D-7218-4DCA-A864-20C9EAEF1165}
 		{313531A7-8E7B-48B5-8595-1CB8FD6C235B} = {C37C162D-7218-4DCA-A864-20C9EAEF1165}
+		{F573D70A-23EA-4A0F-A7A3-FD9A353AE054} = {C37C162D-7218-4DCA-A864-20C9EAEF1165}
+		{DAF09543-9A9B-4530-946B-6E14D7AE970A} = {C37C162D-7218-4DCA-A864-20C9EAEF1165}
 	EndGlobalSection
 EndGlobal
