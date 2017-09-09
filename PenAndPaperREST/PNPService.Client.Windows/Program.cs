@@ -1,9 +1,4 @@
-﻿using PNPService.Shared.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PNPService.Shared.Handler;
 
 namespace PNPService.Client.Windows
 {
@@ -11,8 +6,7 @@ namespace PNPService.Client.Windows
     {
         static void Main(string[] args)
         {
-            HTTPViewModel httpViewModel = new HTTPViewModel();
-            
+            HttpRequestHandler httpRequestHandler = new HttpRequestHandler();
         }
     }
 }

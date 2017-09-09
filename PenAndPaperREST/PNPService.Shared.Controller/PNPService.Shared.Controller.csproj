@@ -51,7 +51,6 @@
     <Compile Include="HTTPController.cs" />
     <Compile Include="MySQLController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SessionController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PNPService.Shared.Controller.Contracts\PNPService.Shared.Controller.Contracts.csproj">

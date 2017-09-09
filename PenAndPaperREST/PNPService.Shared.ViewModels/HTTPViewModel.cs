@@ -11,6 +11,7 @@ using System.IO;
 using PNPService.Shared.Models;
 using Newtonsoft.Json;
 using System.Dynamic;
+using PNPService.Shared.Models.Char;
 
 namespace PNPService.Shared.ViewModels
 {
@@ -49,12 +50,71 @@ namespace PNPService.Shared.ViewModels
             switch (msg.Type)
             {
                 case "login":
-                    HandleLoginRequest(ref ctx, ref msg);
+
+                    // LoginRequestHandler loginRequestHandler = new LoginRequestHandler();
+
+                    break;
+                case "get-char":
+                    HandleCharGet(ref ctx, ref msg);
+                    break;
+                case "put-char":
+                    HandleCharPut(ref ctx, ref msg);
                     break;
             }
 
         }
 
+        private void HandleCharPut(ref HttpListenerContext ctx, ref Message msg)
+        {
+            PutCharModel pcModel = JsonConvert.DeserializeObject<PutCharModel>(msg.Content);
+
+            if (new SessionViewModel().CheckSessionID(pcModel.SessionID))
+            {
+               //  Character charModel = (Character) pcModel.Character;
+
+
+                try
+                {
+                    // File.WriteAllText()JsonConvert.DeserializeObject<Character>(File.ReadAllText(@".\characters\" + gcModel.Username + @"\" + gcModel.CharacterName + ".json"));
+                }
+                catch (Exception)
+                {
+                   // charModel = new Character();
+                   // charModel.Name = "Character was not found";
+                }
+
+                //dynamic responseContent = new ExpandoObject();
+                //responseContent.Character = charModel;
+
+                //HTTPController.WriteResponse(ref ctx, responseContent);
+
+            }
+        }
+
+        private void HandleCharGet(ref HttpListenerContext ctx, ref Message msg)
+        {
+            GetCharModel gcModel = JsonConvert.DeserializeObject<GetCharModel>(msg.Content);
+
+            if(new SessionViewModel().CheckSessionID(gcModel.SessionID))
+            {
+                Character charModel;
+                try
+                {
+                    charModel = JsonConvert.DeserializeObject<Character>(File.ReadAllText(@".\characters\" + gcModel.Username + @"\" + gcModel.CharacterName + ".json"));
+                }
+                catch (Exception)
+                {
+                    charModel = new Character();
+                    charModel.Name = "Character was not found";
+                }
+
+                dynamic responseContent = new ExpandoObject();
+                responseContent.Character = charModel;
+
+                HTTPController.WriteResponse(ref ctx, responseContent);
+                
+            }
+        }
 
         private void HandleLoginRequest(ref HttpListenerContext ctx, ref Message msg)
         {

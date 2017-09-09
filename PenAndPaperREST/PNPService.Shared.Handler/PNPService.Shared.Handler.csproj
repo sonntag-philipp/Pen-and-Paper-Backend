@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{92BB5786-DBDC-4453-AB30-5847D1860B32}</ProjectGuid>
+    <ProjectGuid>{7466EB72-6321-4B8B-BDCC-747840B18E6A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PNPService.Shared.Models</RootNamespace>
-    <AssemblyName>PNPService.Shared.Models</AssemblyName>
+    <RootNamespace>PNPService.Shared.Handler</RootNamespace>
+    <AssemblyName>PNPService.Shared.Handler</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,23 +43,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountData.cs" />
-    <Compile Include="Char\Character.cs" />
-    <Compile Include="Char\Effect.cs" />
-    <Compile Include="Char\Item.cs" />
-    <Compile Include="Char\Skill.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="GetCharModel.cs" />
-    <Compile Include="Message.cs" />
+    <Compile Include="CharRequestHandler.cs" />
+    <Compile Include="HttpRequestHandler.cs" />
+    <Compile Include="LoginRequestHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PutCharModel.cs" />
-    <Compile Include="Response.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PNPService.Shared.Controller.Contracts\PNPService.Shared.Controller.Contracts.csproj">
+      <Project>{c1a17ec9-0759-4134-93af-609f7cb1a7b6}</Project>
+      <Name>PNPService.Shared.Controller.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PNPService.Shared.Controller\PNPService.Shared.Controller.csproj">
+      <Project>{603C896A-72FF-4CB8-81A1-EDF92D659431}</Project>
+      <Name>PNPService.Shared.Controller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PNPService.Shared.Handler.Contracts\PNPService.Shared.Handler.Contracts.csproj">
+      <Project>{2436c336-7098-4c15-806a-3a6d2a137489}</Project>
+      <Name>PNPService.Shared.Handler.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PNPService.Shared.Models.Contracts\PNPService.Shared.Models.Contracts.csproj">
-      <Project>{313531a7-8e7b-48b5-8595-1cb8fd6c235b}</Project>
+      <Project>{313531A7-8E7B-48B5-8595-1CB8FD6C235B}</Project>
       <Name>PNPService.Shared.Models.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PNPService.Shared.Models\PNPService.Shared.Models.csproj">
+      <Project>{92bb5786-dbdc-4453-ab30-5847d1860b32}</Project>
+      <Name>PNPService.Shared.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

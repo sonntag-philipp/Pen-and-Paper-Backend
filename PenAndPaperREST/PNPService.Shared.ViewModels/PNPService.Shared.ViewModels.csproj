@@ -64,10 +64,6 @@
       <Project>{92bb5786-dbdc-4453-ab30-5847d1860b32}</Project>
       <Name>PNPService.Shared.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PNPService.Shared.ViewModels.Contracts\PNPService.Shared.ViewModels.Contracts.csproj">
-      <Project>{daf09543-9a9b-4530-946b-6e14d7ae970a}</Project>
-      <Name>PNPService.Shared.ViewModels.Contracts</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

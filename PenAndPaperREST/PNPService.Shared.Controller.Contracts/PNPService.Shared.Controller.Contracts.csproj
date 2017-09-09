@@ -47,7 +47,6 @@
     <Compile Include="IConfigController.cs" />
     <Compile Include="IHTTPController.cs" />
     <Compile Include="IMySQLController.cs" />
-    <Compile Include="ISessionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

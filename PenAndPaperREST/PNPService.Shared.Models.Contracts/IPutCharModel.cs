@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PNPService.Shared.Models.Contracts.Char;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,12 +7,10 @@ using System.Threading.Tasks;
 
 namespace PNPService.Shared.Models.Contracts
 {
-    public interface IMessage
+    public interface IPutCharModel
     {
-        string Type { get; set; }
         string SessionID { get; set; }
-        string ResourceName { get; set; }
 
-        string Content { get; set; }
+        string Character { get; set; }
     }
 }

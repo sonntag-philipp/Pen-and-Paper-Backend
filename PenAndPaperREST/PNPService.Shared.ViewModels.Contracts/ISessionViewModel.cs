@@ -12,6 +12,6 @@ namespace PNPService.Shared.ViewModels.Contracts
         IMySQLController DBController { get; set; }
 
         string AddSessionID(string username, string password);
-        bool CheckSessionID(string sid, string username);
+        bool CheckSessionID(string sid);
     }
 }

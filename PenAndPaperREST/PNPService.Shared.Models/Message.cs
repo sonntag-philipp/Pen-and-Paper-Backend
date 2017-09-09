@@ -17,6 +17,22 @@ namespace PNPService.Shared.Models
         }
 
 
+        private string _SessionID;
+
+        public string SessionID {
+            get { return _SessionID; }
+            set { _SessionID = value; }
+        }
+
+
+        private string _ResourceName;
+
+        public string ResourceName {
+            get { return _ResourceName; }
+            set { _ResourceName = value; }
+        }
+
+
         private string _Content;
 
         public string Content {
