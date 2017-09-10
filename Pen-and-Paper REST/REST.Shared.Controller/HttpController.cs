@@ -4,6 +4,7 @@ using REST.Shared.Models.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -28,7 +29,7 @@ namespace REST.Shared.Controller
         /// Class that creates http listeners to listen for incoming api-requests.
         /// </summary>
         /// <param name="requestHandler">Void that handles a request.</param>
-        public HttpController(string prefixDomain)
+        public HttpController()
         {
             Config = new ConfigController().Config;
 
@@ -36,7 +37,7 @@ namespace REST.Shared.Controller
 
             Listener = new HttpListener();
 
-            Listener.Prefixes.Add(prefixDomain);
+            Listener.Prefixes.Add(Config.Http_Prefix);
 
             Thread listenerThread = new Thread(() => HandleLoop());
 
@@ -64,37 +65,74 @@ namespace REST.Shared.Controller
 
         private void HandleRequest(HttpListenerContext ctx)
         {
-            Console.WriteLine("Raw URL: " + ctx.Request.RawUrl);
+            Console.WriteLine("Request: " + ctx.Request.RawUrl);
 
             string rawURL = ctx.Request.RawUrl;
 
             string[] splittedUrl = rawURL.Split('/');
-            Console.WriteLine("Splitted Length: " + splittedUrl.Length);
-            Console.WriteLine("Splitted URL: " + splittedUrl[1]);
-
 
             string resourceID = "default";
-            string databaseID = "";
+            string dbTable = "";
             string response = "not-found";
 
-            if(splittedUrl.Length >= 3)
+            if(splittedUrl.Length >= 4)
             {
-                resourceID = splittedUrl[2];
-                databaseID = splittedUrl[1];
+                resourceID = splittedUrl[3];
+                dbTable = splittedUrl[2];
 
-                switch (databaseID)
+                if (splittedUrl[1] == "get")
                 {
-                    case "skills":
-                        response = _MySqlController.DoQuery(
-                            @"SELECT `content` FROM `json_skills` WHERE `resourceID`=@resourceID",
-                            new KeyValuePair<string, string>[] {
-                                new KeyValuePair<string, string>("resourceID", resourceID)
-                        });
-                        break;
-
-                    default:
-                        break;
+                    switch (dbTable)
+                    {
+                        case "skills":
+                            response = _MySqlController.DoQuery(
+                                @"SELECT `content` FROM `json_skills` WHERE `resourceID`=@resourceID",
+                                new KeyValuePair<string, string>[] {
+                                    new KeyValuePair<string, string>("resourceID", resourceID)
+                            });
+                            break;
+                        case "character":
+                            response = _MySqlController.DoQuery(
+                                @"SELECT `content` FROM `json_characters` WHERE `unique_name`=@guid",
+                                new KeyValuePair<string, string>[] {
+                                    new KeyValuePair<string, string>("guid", resourceID)
+                            });
+                            break;
+                        default:
+                            break;
+                    }
                 }
+                if(splittedUrl[1] == "put")
+                {
+                    switch (dbTable)
+                    {
+                        case "character":
+
+                            StreamReader streamReader = new StreamReader(ctx.Request.InputStream, ctx.Request.ContentEncoding);
+
+                            string guid = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+                            guid = guid.Replace("=", "");
+                            guid = guid.Replace("+", "");
+                            guid = guid.Replace("/", "");
+
+
+                            _MySqlController.DoQuery(
+                                @"INSERT INTO `json_characters` (`unique_name`, `content`) VALUES (@guid, @character)",
+                                new KeyValuePair<string, string>[] {
+                                    new KeyValuePair<string, string>("guid", guid),
+                                    new KeyValuePair<string, string>("character", streamReader.ReadToEnd())
+                            });
+
+                            response = "{\"guid\": \"" + guid + "\"}";
+
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+
+                
 
 
             }

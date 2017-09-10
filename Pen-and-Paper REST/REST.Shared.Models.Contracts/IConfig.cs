@@ -14,5 +14,8 @@ namespace REST.Shared.Models.Contracts
         string MySQL_Password { get; set; }
         string MySQL_Database { get; set; }
         string MySQL_Port { get; set; }
+
+        // Http Data
+        string Http_Prefix { get; set; }
     }
 }

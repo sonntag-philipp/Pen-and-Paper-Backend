@@ -11,7 +11,7 @@ namespace REST.Client.Windows
     {
         static void Main(string[] args)
         {
-            HttpController http = new HttpController(args == null ? args[0] : "http://localhost:8080/");
+            HttpController http = new HttpController();
         }
     }
 }

@@ -37,8 +37,9 @@ namespace REST.Shared.Controller
         /// Reads the content of the ServerConfig.json and puts it into the config object.
         /// </summary>
         public void ReadFile()
-        {
-            Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(@".\ServerConfig.json"));
+        { 
+            
+            Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(@"./ServerConfig.json"));
         }
 
 
@@ -47,7 +48,7 @@ namespace REST.Shared.Controller
         /// </summary>
         public void WriteFile()
         {
-            File.WriteAllText(@".\ServerConfig.json", JsonConvert.SerializeObject(_Config));
+            File.WriteAllText(@"./ServerConfig.json", JsonConvert.SerializeObject(_Config));
         }
     }
 }

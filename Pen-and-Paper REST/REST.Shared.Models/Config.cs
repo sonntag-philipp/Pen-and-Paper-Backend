@@ -57,5 +57,14 @@ namespace REST.Shared.Models
             get { return _MySQL_Port; }
             set { _MySQL_Port = value; }
         }
+
+
+        private string _Http_Prefix;
+
+        public string Http_Prefix {
+            get { return _Http_Prefix; }
+            set { _Http_Prefix = value; }
+        }
+
     }
 }
