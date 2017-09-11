@@ -15,11 +15,27 @@ namespace REST.Shared.Controller
 {
     public class HttpController: IHttpController
     {
-        private HttpListener _Listener;
 
         private IConfig Config;
         private MySqlController _MySqlController;
 
+        public delegate void requestHandle(HttpListenerContext ctx);
+
+        private requestHandle _postHandler;
+        public requestHandle PostHandler {
+            get { return _postHandler; }
+            set { _postHandler = value; }
+        }
+
+
+        private requestHandle _getHandler;
+        public requestHandle GetHandler {
+            get { return _getHandler; }
+            set { _getHandler = value; }
+        }
+
+
+        private HttpListener _Listener;
         public HttpListener Listener {
             get { return _Listener; }
             set { _Listener = value; }
@@ -29,19 +45,20 @@ namespace REST.Shared.Controller
         /// Class that creates http listeners to listen for incoming api-requests.
         /// </summary>
         /// <param name="requestHandler">Void that handles a request.</param>
-        public HttpController()
+        public HttpController(requestHandle postHandler, requestHandle getHandler)
         {
+            PostHandler = postHandler;
+            GetHandler = getHandler;
+
             Config = new ConfigController().Config;
 
             _MySqlController = new MySqlController(Config);
 
             Listener = new HttpListener();
-
             Listener.Prefixes.Add(Config.Http_Prefix);
 
-            Thread listenerThread = new Thread(() => HandleLoop());
-
-            listenerThread.Start();
+            Thread listenThread = new Thread(() => HandleLoop());
+            listenThread.Start();
         }
 
         private void HandleLoop()
@@ -65,96 +82,11 @@ namespace REST.Shared.Controller
 
         private void HandleRequest(HttpListenerContext ctx)
         {
-            Console.WriteLine("Request: " + ctx.Request.RawUrl);
+            Console.WriteLine("+" + ctx.Request.HttpMethod + "  -- " + ctx.Request.RawUrl);
 
-            string rawURL = ctx.Request.RawUrl;
+            if (ctx.Request.HttpMethod == "GET") GetHandler(ctx);
 
-            string[] splittedUrl = rawURL.Split('/');
-
-            string resourceID = "default";
-            string dbTable = "";
-            string response = "not-found";
-
-            if(splittedUrl.Length >= 4)
-            {
-                resourceID = splittedUrl[3];
-                dbTable = splittedUrl[2];
-
-                if (splittedUrl[1] == "get")
-                {
-                    switch (dbTable)
-                    {
-                        case "skills":
-                            response = _MySqlController.DoQuery(
-                                @"SELECT `content` FROM `json_skills` WHERE `resourceID`=@resourceID",
-                                new KeyValuePair<string, string>[] {
-                                    new KeyValuePair<string, string>("resourceID", resourceID)
-                            });
-                            break;
-                        case "character":
-                            response = _MySqlController.DoQuery(
-                                @"SELECT `content` FROM `json_characters` WHERE `unique_name`=@guid",
-                                new KeyValuePair<string, string>[] {
-                                    new KeyValuePair<string, string>("guid", resourceID)
-                            });
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                if(splittedUrl[1] == "put")
-                {
-                    switch (dbTable)
-                    {
-                        case "character":
-
-                            StreamReader streamReader = new StreamReader(ctx.Request.InputStream, ctx.Request.ContentEncoding);
-
-                            string guid = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
-                            guid = guid.Replace("=", "");
-                            guid = guid.Replace("+", "");
-                            guid = guid.Replace("/", "");
-
-
-                            _MySqlController.DoQuery(
-                                @"INSERT INTO `json_characters` (`unique_name`, `content`) VALUES (@guid, @character)",
-                                new KeyValuePair<string, string>[] {
-                                    new KeyValuePair<string, string>("guid", guid),
-                                    new KeyValuePair<string, string>("character", streamReader.ReadToEnd())
-                            });
-
-                            response = "{\"guid\": \"" + guid + "\"}";
-
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-
-                
-
-
-            }
-
-            WriteResponse(ctx, response);
-        }
-
-        static public void WriteResponse(HttpListenerContext ctx, string response)
-        {
-            if (response == "not-found" || response == "") ctx.Response.StatusCode = 404;
-            else ctx.Response.StatusCode = 200;
-
-            
-
-            ctx.Response.AddHeader("Access-Control-Allow-Origin", "*");
-
-            byte[] buffer = Encoding.UTF8.GetBytes(response);
-            ctx.Response.ContentLength64 = buffer.Length;
-            ctx.Response.OutputStream.Write(buffer, 0, buffer.Length);
-
-            ctx.Response.OutputStream.Close();
-            ctx.Response.Close();
+            if (ctx.Request.HttpMethod == "POST") PostHandler(ctx);
         }
     }
 }

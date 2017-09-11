@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E9028C29-B899-4CF1-A506-25B18FC3FBEA}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>REST.Client.Windows</RootNamespace>
-    <AssemblyName>REST.Client.Windows</AssemblyName>
+    <ProjectGuid>{799E62E9-CAA7-4A55-9431-1ECB4CE278D9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>REST.Shared.Handler.Contracts</RootNamespace>
+    <AssemblyName>REST.Shared.Handler.Contracts</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -42,25 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="IGetHandler.cs" />
+    <Compile Include="IPostHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\REST.Shared.Controller\REST.Shared.Controller.csproj">
-      <Project>{8c72b4b8-30f1-41bb-ac48-01b040597014}</Project>
-      <Name>REST.Shared.Controller</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\REST.Shared.Handler\REST.Shared.Handler.csproj">
-      <Project>{2ef693c9-3e07-4c66-b960-048f61e78bcb}</Project>
-      <Name>REST.Shared.Handler</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
 </Project>

@@ -1,4 +1,5 @@
 ﻿using REST.Shared.Controller;
+using REST.Shared.Handler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,10 @@ namespace REST.Client.Windows
     {
         static void Main(string[] args)
         {
-            HttpController http = new HttpController();
+            PostHandler postHandler = new PostHandler();
+            GetHandler getHandler = new GetHandler();
+
+            HttpController httpController = new HttpController(postHandler.HandlePost, getHandler.HandleGet);
         }
     }
 }
