@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7BA05A60-1D05-4453-8EF6-763D715E0830}</ProjectGuid>
+    <ProjectGuid>{6DA12D28-4D3C-43DD-9420-6786F28716BD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>REST.Shared.Controller.Contracts</RootNamespace>
-    <AssemblyName>REST.Shared.Controller.Contracts</AssemblyName>
+    <RootNamespace>REST.Shared.Utilities</RootNamespace>
+    <AssemblyName>REST.Shared.Utilities</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,16 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IConfigController.cs" />
-    <Compile Include="IHttpController.cs" />
-    <Compile Include="IMySqlController.cs" />
+    <Compile Include="ApiRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\REST.Shared.Models.Contracts\REST.Shared.Models.Contracts.csproj">
-      <Project>{eacd829d-8d07-4ed5-a04e-e9fab2ec6916}</Project>
-      <Name>REST.Shared.Models.Contracts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\REST.Shared.Utilities.Contracts\REST.Shared.Utilities.Contracts.csproj">
       <Project>{ac5f6dae-228b-449f-8017-f2849936c073}</Project>
       <Name>REST.Shared.Utilities.Contracts</Name>

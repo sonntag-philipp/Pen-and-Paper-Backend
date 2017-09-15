@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using REST.Shared.Controller.Contracts;
 using REST.Shared.Models.Contracts;
+using REST.Shared.Utilities;
+using REST.Shared.Utilities.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -19,14 +21,14 @@ namespace REST.Shared.Controller
         private IConfig Config;
         private MySqlController _MySqlController;
 
-        public delegate void requestHandle(HttpListenerContext ctx);
+        public delegate void requestHandle(IApiRequest Request);
 
         private requestHandle _postHandler;
         public requestHandle PostHandler {
             get { return _postHandler; }
             set { _postHandler = value; }
         }
-
+        
 
         private requestHandle _getHandler;
         public requestHandle GetHandler {
@@ -59,6 +61,8 @@ namespace REST.Shared.Controller
 
             Thread listenThread = new Thread(() => HandleLoop());
             listenThread.Start();
+
+            Console.WriteLine("[" + DateTime.Now + "] Listening on \"" + Config.Http_Prefix + "\"");
         }
 
         private void HandleLoop()
@@ -70,8 +74,8 @@ namespace REST.Shared.Controller
                 try
                 {
                     HttpListenerContext context = Listener.GetContext();
-
-                    ThreadPool.QueueUserWorkItem(o => HandleRequest(context));
+                    
+                    ThreadPool.QueueUserWorkItem(o => HandleRequest(new ApiRequest(context)));
                 }
                 catch (Exception)
                 {
@@ -80,13 +84,28 @@ namespace REST.Shared.Controller
             }
         }
 
-        private void HandleRequest(HttpListenerContext ctx)
+        public void HandleRequest(IApiRequest request)
         {
-            Console.WriteLine("+" + ctx.Request.HttpMethod + "  -- " + ctx.Request.RawUrl);
+            try
+            {
+                switch (request.Method)
+                {
+                    case "GET":
+                        Console.WriteLine("[" + DateTime.Now + "][GET]  " + request.URL);
+                        GetHandler(request);
+                        break;
 
-            if (ctx.Request.HttpMethod == "GET") GetHandler(ctx);
-
-            if (ctx.Request.HttpMethod == "POST") PostHandler(ctx);
+                    case "POST":
+                        Console.WriteLine("[" + DateTime.Now + "][POST] " + request.URL);
+                        PostHandler(request);
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("[" + DateTime.Now + "][ERROR] Exception in Request Handler");
+                Console.WriteLine(e.StackTrace);
+            }
         }
     }
 }

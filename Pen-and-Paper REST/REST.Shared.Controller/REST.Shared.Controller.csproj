@@ -68,6 +68,14 @@
       <Project>{cc6cebed-7a24-4084-b987-3c21a273ec1d}</Project>
       <Name>REST.Shared.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\REST.Shared.Utilities.Contracts\REST.Shared.Utilities.Contracts.csproj">
+      <Project>{AC5F6DAE-228B-449F-8017-F2849936C073}</Project>
+      <Name>REST.Shared.Utilities.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\REST.Shared.Utilities\REST.Shared.Utilities.csproj">
+      <Project>{6da12d28-4d3c-43dd-9420-6786f28716bd}</Project>
+      <Name>REST.Shared.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

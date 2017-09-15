@@ -57,6 +57,10 @@
       <Project>{2ef693c9-3e07-4c66-b960-048f61e78bcb}</Project>
       <Name>REST.Shared.Handler</Name>
     </ProjectReference>
+    <ProjectReference Include="..\REST.Shared.Utilities.Contracts\REST.Shared.Utilities.Contracts.csproj">
+      <Project>{ac5f6dae-228b-449f-8017-f2849936c073}</Project>
+      <Name>REST.Shared.Utilities.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

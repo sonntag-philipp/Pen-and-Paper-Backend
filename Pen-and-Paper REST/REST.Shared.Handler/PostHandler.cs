@@ -1,5 +1,6 @@
 ﻿using REST.Shared.Controller;
 using REST.Shared.Handler.Contracts;
+using REST.Shared.Utilities.Contracts;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +13,8 @@ namespace REST.Shared.Handler
 {
     public class PostHandler : IPostHandler
     {
+        List<string> routes = new List<string>();
+
         private HttpController _Controller;
         public HttpController HttpController {
             get { return _Controller; }
@@ -32,32 +35,14 @@ namespace REST.Shared.Handler
             MySqlController = new MySqlController(new ConfigController().Config);
         }
 
-        public void HandlePost(HttpListenerContext ctx)
+        public void HandlePost(IApiRequest request)
         {
-            string[] splittedURL = ctx.Request.RawUrl.Split('/');
-
-            if (splittedURL.Length != 3)
-            {
-                StopRequest(ctx);
-                return;
-            }
-
-
-            string response = "";
-
-
-            StreamReader streamReader = new StreamReader(ctx.Request.InputStream, ctx.Request.ContentEncoding);
-
-            string content = streamReader.ReadToEnd();
-
-            switch (splittedURL[1])
+            switch (request.RequestedTable)
             {
                 case "character":
-
-
-                    if (content.Length >= 16000)
+                    if (request.Content.Length >= 16000)
                     {
-                        StopRequest(ctx);
+                        request.SendError();
                         return;
                     }
 
@@ -65,52 +50,46 @@ namespace REST.Shared.Handler
                     guid = guid.Replace("=", "");
                     guid = guid.Replace("+", "");
                     guid = guid.Replace("/", "");
+                    guid = guid.Substring(0, 6);
 
                     MySqlController.DoQuery(
                         @"INSERT INTO `json_characters` (`unique_name`, `content`) VALUES (@guid, @character)",
                         new KeyValuePair<string, string>[] {
                             new KeyValuePair<string, string>("guid", guid),
-                            new KeyValuePair<string, string>("character", content)
+                            new KeyValuePair<string, string>("character", request.Content)
                     });
 
-                    response = "{\"guid\": \"" + guid + "\"}";
+                    request.SendResponse(guid);
+                    break;
+                case "account":
+                    if (request.Content.Length >= 16000)
+                    {
+                        request.SendError();
+                        return;
+                    }
+
+                    if(MySqlController.DoQuery(
+                        @"SELECT `content` FROM `json_accounts` WHERE `username`=@resourceID",
+                        new KeyValuePair<string, string>[]
+                        {
+                            new KeyValuePair<string, string>("resourceID", request.RequestedResource)
+                        }
+                    ) == "")
+                    {
+                        MySqlController.DoQuery(
+                        @"INSERT INTO `json_accounts` (`username`, `content`) VALUES (@resourceID, @content)",
+                        new KeyValuePair<string, string>[] {
+                            new KeyValuePair<string, string>("resourceID", request.RequestedResource),
+                            new KeyValuePair<string, string>("content", request.Content)
+                        });
+                        request.SendResponse("Successful created", 200);
+                    }
+                    else
+                    {
+                        request.SendResponse("Account already exists", 500);
+                    }
                     break;
             }
-
-            if (string.IsNullOrEmpty(response.Trim()))
-            {
-                StopRequest(ctx);
-                return;
-            }
-
-            // Writing the headers of the response
-            ctx.Response.StatusCode = 200;
-            ctx.Response.AddHeader("Access-Control-Allow-Origin", "*");
-            ctx.Response.AddHeader("Content-Type", "text/html; charset=utf-8");
-
-
-            // Writing the body of the response
-            byte[] buffer = Encoding.UTF8.GetBytes(response);
-            ctx.Response.ContentLength64 = buffer.Length;
-            ctx.Response.OutputStream.Write(buffer, 0, buffer.Length);
-
-            ctx.Response.OutputStream.Close();
-            ctx.Response.Close();
-        }
-
-        private void StopRequest(HttpListenerContext ctx)
-        {
-            ctx.Response.StatusCode = 500;
-            ctx.Response.AddHeader("Access-Control-Allow-Origin", "*");
-            ctx.Response.AddHeader("Content-Type", "text/html; charset=utf-8");
-
-            // Writing the body of the response
-            byte[] buffer = Encoding.UTF8.GetBytes("<h1>500 - Database Error</h1>");
-            ctx.Response.ContentLength64 = buffer.Length;
-            ctx.Response.OutputStream.Write(buffer, 0, buffer.Length);
-
-            ctx.Response.OutputStream.Close();
-            ctx.Response.Close();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using REST.Shared.Controller;
 using REST.Shared.Handler.Contracts;
+using REST.Shared.Utilities.Contracts;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +13,7 @@ namespace REST.Shared.Handler
 {
     public class GetHandler : IGetHandler
     {
+
         private HttpController _Controller;
         public HttpController HttpController {
             get { return _Controller; }
@@ -19,7 +21,6 @@ namespace REST.Shared.Handler
         }
 
         private MySqlController _MySqlController;
-
         public MySqlController MySqlController {
             get { return _MySqlController; }
             set { _MySqlController = value; }
@@ -31,71 +32,40 @@ namespace REST.Shared.Handler
         }
 
 
-        public void HandleGet(HttpListenerContext ctx)
+        public void HandleGet(IApiRequest request)
         {
-            string[] splittedURL = ctx.Request.RawUrl.Split('/');
+            //TODO: Make a list with a foreach loop and a class that automatically sends the response.
 
-            if (splittedURL.Length != 3)
-            {
-                StopRequest(ctx);
-                return;
-            }
-
-
-            string response = "";
-
-            switch (splittedURL[1])
+            switch (request.RequestedTable)
             {
                 case "skills":
-                    response = MySqlController.DoQuery(
+                    request.SendResponse(MySqlController.DoQuery(
                         @"SELECT `content` FROM `json_skills` WHERE `resourceID`=@resourceID",
-                        new KeyValuePair<string, string>[] {
-                                    new KeyValuePair<string, string>("resourceID", splittedURL[2])
-                    });
+                        new KeyValuePair<string, string>[] 
+                        {
+                            new KeyValuePair<string, string>("resourceID", request.RequestedResource)
+                        }
+                    ));
                     break;
                 case "character":
-                    response = MySqlController.DoQuery(
-                        @"SELECT `content` FROM `json_characters` WHERE `unique_name`=@guid",
-                        new KeyValuePair<string, string>[] {
-                                    new KeyValuePair<string, string>("guid", splittedURL[2])
-                    });
+                    request.SendResponse(MySqlController.DoQuery(
+                        @"SELECT `content` FROM `json_characters` WHERE `unique_name`=@resourceID",
+                        new KeyValuePair<string, string>[] 
+                        {
+                            new KeyValuePair<string, string>("resourceID", request.RequestedResource)
+                        }
+                    ));
+                    break;
+                case "account":
+                    request.SendResponse(MySqlController.DoQuery(
+                        @"SELECT `content` FROM `json_accounts` WHERE `username`=@resourceID",
+                        new KeyValuePair<string, string>[]
+                        {
+                            new KeyValuePair<string, string>("resourceID", request.RequestedResource)
+                        }
+                    ));
                     break;
             }
-
-            if (string.IsNullOrEmpty(response.Trim()))
-            {
-                StopRequest(ctx);
-                return;
-            }
-
-            // Writing the headers of the response
-            
-            ctx.Response.AddHeader("Access-Control-Allow-Origin", "*");
-            ctx.Response.AddHeader("Content-Type", "application/json; charset=utf-8");
-
-
-            // Writing the body of the response
-            byte[] buffer = Encoding.UTF8.GetBytes(response);
-            ctx.Response.ContentLength64 = buffer.Length;
-            ctx.Response.OutputStream.Write(buffer, 0, buffer.Length);
-
-            ctx.Response.OutputStream.Close();
-            ctx.Response.Close();
-        }
-
-        private void StopRequest(HttpListenerContext ctx)
-        {
-            ctx.Response.StatusCode = 404;
-            ctx.Response.AddHeader("Access-Control-Allow-Origin", "*");
-            ctx.Response.AddHeader("Content-Type", "text/html; charset=utf-8");
-
-            // Writing the body of the response
-            byte[] buffer = Encoding.UTF8.GetBytes("<h1>404 - Not found</h1>");
-            ctx.Response.ContentLength64 = buffer.Length;
-            ctx.Response.OutputStream.Write(buffer, 0, buffer.Length);
-
-            ctx.Response.OutputStream.Close();
-            ctx.Response.Close();
         }
     }
 }
