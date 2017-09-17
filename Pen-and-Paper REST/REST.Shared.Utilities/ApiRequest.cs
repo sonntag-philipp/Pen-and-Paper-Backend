@@ -1,11 +1,7 @@
 ﻿using REST.Shared.Utilities.Contracts;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace REST.Shared.Utilities
 {
@@ -50,6 +46,14 @@ namespace REST.Shared.Utilities
             set { _Content = value; }
         }
 
+        private string _Route;
+
+        public string Route {
+            get { return _Route; }
+            set { _Route = value; }
+        }
+
+
 
         public ApiRequest(HttpListenerContext ctx)
         {
@@ -62,66 +66,57 @@ namespace REST.Shared.Utilities
                 Content = reader.ReadToEnd();
             }
 
+            if (Content.Length > 16000) throw new ApiException("Too long request.", 500);
+
             if(URL.Split('/').Length == 3)
             {
-                RequestedResource = Context.Request.RawUrl.Split('/')[2];
-                RequestedTable = Context.Request.RawUrl.Split('/')[1];
+                Route = "/" + URL.Split('/')[1] + "/";
+                RequestedResource = URL.Split('/')[2];
+                RequestedTable = URL.Split('/')[1];
             }
-        }
-
-        public void SendResponse(string response)
-        {
-            if (response.Trim() == "")
-            {
-                SendResponse(404);
-                return;
-            }
-            Context.Response.AddHeader("Access-Control-Allow-Origin", "*");
-            Context.Response.AddHeader("Content-Type", "application/json; charset=utf-8");
-
-
-            byte[] buffer = Encoding.UTF8.GetBytes(response);
-            Context.Response.ContentLength64 = buffer.Length;
-            Context.Response.OutputStream.Write(buffer, 0, buffer.Length);
-
-            Context.Response.OutputStream.Close();
-            Context.Response.Close();
-        }
-
-        public void SendResponse(int status)
-        {
-            Context.Response.StatusCode = status;
-            Context.Response.AddHeader("Access-Control-Allow-Origin", "*");
-            
-            Context.Response.OutputStream.Close();
-            Context.Response.Close();
-        }
-
-        public void SendResponse(string response, int status)
-        {
-            Context.Response.StatusCode = status;
-            Context.Response.AddHeader("Access-Control-Allow-Origin", "*");
-            Context.Response.AddHeader("Content-Type", "application/json; charset=utf-8");
-
-            
-            byte[] buffer = Encoding.UTF8.GetBytes(response);
-            Context.Response.ContentLength64 = buffer.Length;
-            Context.Response.OutputStream.Write(buffer, 0, buffer.Length);
-
-            Context.Response.OutputStream.Close();
-            Context.Response.Close();
-        }
-
-        public void SendError()
-        {
-            Context.Response.AddHeader("Access-Control-Allow-Origin", "*");
-            Context.Response.StatusCode = 500;
-            Context.Response.OutputStream.Close();
-            Context.Response.Close();
         }
         
         public void Close()
         {
+            Context.Response.OutputStream.Close();
+            Context.Response.Close();
+        }
+
+        public void Respond(string body)
+        {
+            Context.Response.StatusCode = 200;
+            Context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+            Context.Response.AddHeader("Content-Type", "application/json; charset=utf-8");
+
+
+            byte[] buffer = Encoding.UTF8.GetBytes(body);
+            Context.Response.ContentLength64 = buffer.Length;
+            Context.Response.OutputStream.Write(buffer, 0, buffer.Length);
+
+            Context.Response.OutputStream.Close();
+            Context.Response.Close();
+        }
+
+        public void Respond(string body, int status)
+        {
+            Context.Response.StatusCode = status;
+            Context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+            Context.Response.AddHeader("Content-Type", "application/json; charset=utf-8");
+
+
+            byte[] buffer = Encoding.UTF8.GetBytes(body);
+            Context.Response.ContentLength64 = buffer.Length;
+            Context.Response.OutputStream.Write(buffer, 0, buffer.Length);
+
+            Context.Response.OutputStream.Close();
+            Context.Response.Close();
+        }
+
+        public void Respond(int status)
+        {
+            Context.Response.StatusCode = status;
+            Context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+
             Context.Response.OutputStream.Close();
             Context.Response.Close();
         }

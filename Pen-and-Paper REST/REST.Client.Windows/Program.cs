@@ -1,11 +1,5 @@
-﻿using REST.Shared.Controller;
-using REST.Shared.Handler;
-using REST.Shared.Utilities.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using REST.Shared.Handler;
+using REST.Shared.Listener;
 
 namespace REST.Client.Windows
 {
@@ -13,8 +7,12 @@ namespace REST.Client.Windows
     {
         static void Main(string[] args)
         {
-            HttpController httpController = new HttpController(new PostHandler().HandlePost, new GetHandler().HandleGet);
+            HttpListener Listener = new HttpListener("http://localhost:8080/");
 
+            Listener.AddRoute(new CharacterRouteHandler());
+            Listener.AddRoute(new AccountRouteHandler());
+
+            Listener.Start();
         }
     }
 }

@@ -40,9 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IGetHandler.cs" />
-    <Compile Include="IPostHandler.cs" />
+    <Compile Include="IRouteHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\REST.Shared.Controller.Contracts\REST.Shared.Controller.Contracts.csproj">
+      <Project>{7BA05A60-1D05-4453-8EF6-763D715E0830}</Project>
+      <Name>REST.Shared.Controller.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\REST.Shared.Utilities.Contracts\REST.Shared.Utilities.Contracts.csproj">
+      <Project>{AC5F6DAE-228B-449F-8017-F2849936C073}</Project>
+      <Name>REST.Shared.Utilities.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

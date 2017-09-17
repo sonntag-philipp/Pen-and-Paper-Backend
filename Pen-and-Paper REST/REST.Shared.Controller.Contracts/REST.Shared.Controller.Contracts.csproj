@@ -41,7 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IConfigController.cs" />
-    <Compile Include="IHttpController.cs" />
     <Compile Include="IMySqlController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

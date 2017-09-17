@@ -1,14 +1,12 @@
 ﻿using MySql.Data.MySqlClient;
+using REST.Shared.Controller.Contracts;
 using REST.Shared.Models.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace REST.Shared.Controller
 {
-    public class MySqlController
+    public class MySqlController : IMySqlController
     {
         private MySqlConnection _connection;
         private MySqlDataReader _reader;

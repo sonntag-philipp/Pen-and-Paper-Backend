@@ -53,9 +53,25 @@
       <Project>{8c72b4b8-30f1-41bb-ac48-01b040597014}</Project>
       <Name>REST.Shared.Controller</Name>
     </ProjectReference>
+    <ProjectReference Include="..\REST.Shared.Handler.Contracts\REST.Shared.Handler.Contracts.csproj">
+      <Project>{799E62E9-CAA7-4A55-9431-1ECB4CE278D9}</Project>
+      <Name>REST.Shared.Handler.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\REST.Shared.Handler\REST.Shared.Handler.csproj">
       <Project>{2ef693c9-3e07-4c66-b960-048f61e78bcb}</Project>
       <Name>REST.Shared.Handler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\REST.Shared.Listener\REST.Shared.Listener.csproj">
+      <Project>{BC0BDDEF-D87C-47F1-95B2-6730DB93D27D}</Project>
+      <Name>REST.Shared.Listener</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\REST.Shared.Models.Contracts\REST.Shared.Models.Contracts.csproj">
+      <Project>{EACD829D-8D07-4ED5-A04E-E9FAB2EC6916}</Project>
+      <Name>REST.Shared.Models.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\REST.Shared.Models\REST.Shared.Models.csproj">
+      <Project>{CC6CEBED-7A24-4084-B987-3C21A273EC1D}</Project>
+      <Name>REST.Shared.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\REST.Shared.Utilities.Contracts\REST.Shared.Utilities.Contracts.csproj">
       <Project>{ac5f6dae-228b-449f-8017-f2849936c073}</Project>

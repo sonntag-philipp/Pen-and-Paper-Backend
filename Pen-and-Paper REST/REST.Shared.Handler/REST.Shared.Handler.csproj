@@ -40,11 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GetHandler.cs" />
-    <Compile Include="PostHandler.cs" />
+    <Compile Include="CharacterRouteHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\REST.Shared.Controller.Contracts\REST.Shared.Controller.Contracts.csproj">
+      <Project>{7BA05A60-1D05-4453-8EF6-763D715E0830}</Project>
+      <Name>REST.Shared.Controller.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\REST.Shared.Controller\REST.Shared.Controller.csproj">
       <Project>{8c72b4b8-30f1-41bb-ac48-01b040597014}</Project>
       <Name>REST.Shared.Controller</Name>
@@ -60,6 +63,10 @@
     <ProjectReference Include="..\REST.Shared.Utilities.Contracts\REST.Shared.Utilities.Contracts.csproj">
       <Project>{ac5f6dae-228b-449f-8017-f2849936c073}</Project>
       <Name>REST.Shared.Utilities.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\REST.Shared.Utilities\REST.Shared.Utilities.csproj">
+      <Project>{6DA12D28-4D3C-43DD-9420-6786F28716BD}</Project>
+      <Name>REST.Shared.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

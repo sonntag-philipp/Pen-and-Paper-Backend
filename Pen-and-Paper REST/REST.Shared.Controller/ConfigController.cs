@@ -2,12 +2,7 @@
 using REST.Shared.Controller.Contracts;
 using REST.Shared.Models;
 using REST.Shared.Models.Contracts;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace REST.Shared.Controller
 {
