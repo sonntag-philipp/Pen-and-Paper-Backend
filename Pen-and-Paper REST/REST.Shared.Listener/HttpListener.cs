@@ -10,27 +10,37 @@ namespace REST.Shared.Listener
 {
     public class HttpListener : IHttpListener
     {
+        /// <summary>
+        /// List that contains the active routes.
+        /// </summary>
         public List<IRouteHandler> Routes {
             get { return _Routes; }
-            set { _Routes = value; }
+            private set { _Routes = value; }
         }
         private List<IRouteHandler> _Routes;
 
-
+        /// <summary>
+        /// Thread which contains the http listener.
+        /// </summary>
         public Thread ListenerThread {
             get { return _ListenerThread; }
-            set { _ListenerThread = value; }
+            private set { _ListenerThread = value; }
         }
         private Thread _ListenerThread;
 
-
+        /// <summary>
+        /// The HttpListener which gets the context.
+        /// </summary>
         public System.Net.HttpListener Listener {
             get { return _Listener; }
-            set { _Listener = value; }
+            private set { _Listener = value; }
         }
         private System.Net.HttpListener _Listener;
 
-
+        /// <summary>
+        /// Http Listener with listener thread and route handling.
+        /// </summary>
+        /// <param name="prefix">The prefix of the http listener</param>
         public HttpListener(string prefix)
         {
             Routes = new List<IRouteHandler>();
@@ -40,12 +50,18 @@ namespace REST.Shared.Listener
             ListenerThread = new Thread(() => ListenThread());
         }
 
+        /// <summary>
+        /// Starts the listener and the thread.
+        /// </summary>
         public void Start()
         {
             Listener.Start();
             ListenerThread.Start();
         }
 
+        /// <summary>
+        /// Stops the listener.
+        /// </summary>
         public void Stop()
         {
             Listener.Stop();
@@ -73,6 +89,10 @@ namespace REST.Shared.Listener
         {
             ApiRequest request = new ApiRequest(context);
 
+            Console.WriteLine("[" + DateTime.Now + "][" + request.Method + "] " + request.URL);
+
+            bool found = false;
+
             foreach (IRouteHandler item in Routes)
             {
                 if(item.Route == request.Route)
@@ -82,24 +102,24 @@ namespace REST.Shared.Listener
                         switch (context.Request.HttpMethod)
                         {
                             case "PUT":
-                                Console.WriteLine("[" + DateTime.Now + "][PUT]   " + request.URL);
                                 item.Put(request);
+                                found = true;
                                 break;
                             case "POST":
-                                Console.WriteLine("[" + DateTime.Now + "][POST]  " + request.URL);
                                 item.Post(request);
+                                found = true;
                                 break;
                             case "GET":
-                                Console.WriteLine("[" + DateTime.Now + "][GET]   " + request.URL);
                                 item.Get(request);
+                                found = true;
                                 break;
                             case "DELETE":
-                                Console.WriteLine("[" + DateTime.Now + "][DELETE]" + request.URL);
                                 item.Delete(request);
+                                found = true;
                                 break;
                             case "OPTIONS":
-                                Console.WriteLine("[" + DateTime.Now + "][OPTIONS]" + request.URL);
                                 item.Options(request);
+                                found = true;
                                 break;
                         }
                     }
@@ -107,21 +127,26 @@ namespace REST.Shared.Listener
                     {
                         if(e.HttpBody != null) request.Respond(e.HttpBody, e.HttpStatus);
                         else request.Respond(e.HttpStatus);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("[" + DateTime.Now + "][ERROR] Exception in context handler.");
-                        Console.WriteLine(e.StackTrace);
+                        found = true;
                     }
                 }
             }
+            if(!found) request.Respond(404);
         }
 
+        /// <summary>
+        /// Adds a route to the route-list.
+        /// </summary>
+        /// <param name="route">Route to add</param>
         public void AddRoute(IRouteHandler route)
         {
             Routes.Add(route);
         }
 
+        /// <summary>
+        /// Removes a route from the route-list.
+        /// </summary>
+        /// <param name="route">Route to remove</param>
         public void RemoveRoute(IRouteHandler route)
         {
             Routes.Remove(route);

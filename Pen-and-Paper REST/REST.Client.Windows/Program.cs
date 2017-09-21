@@ -1,4 +1,5 @@
-﻿using REST.Shared.Handler;
+﻿using REST.Shared.Controller;
+using REST.Shared.Handler;
 using REST.Shared.Listener;
 
 namespace REST.Client.Windows
@@ -7,12 +8,12 @@ namespace REST.Client.Windows
     {
         static void Main(string[] args)
         {
-            HttpListener Listener = new HttpListener("http://localhost:8080/");
+            HttpListener Listener = new HttpListener(new ConfigController().Config.Http_Prefix);
 
             Listener.AddRoute(new CharacterRouteHandler());
             Listener.AddRoute(new AccountRouteHandler());
-
             Listener.Start();
+
         }
     }
 }

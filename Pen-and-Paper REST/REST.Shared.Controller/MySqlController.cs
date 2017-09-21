@@ -3,6 +3,7 @@ using REST.Shared.Controller.Contracts;
 using REST.Shared.Models.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace REST.Shared.Controller
 {
@@ -11,6 +12,10 @@ namespace REST.Shared.Controller
         private MySqlConnection _connection;
         private MySqlDataReader _reader;
 
+        /// <summary>
+        /// Creates a connection to the in the config specified mysql server.
+        /// </summary>
+        /// <param name="Config">Server config</param>
         public MySqlController(IConfig Config)
         {
             _connection = new MySqlConnection(
@@ -28,12 +33,45 @@ namespace REST.Shared.Controller
             Close();
         }
 
+        /// <summary>
+        /// Closes the connection to the database.
+        /// </summary>
         public void Close()
         {
             _reader.Close();
             _connection.Close();
         }
 
+        /// <summary>
+        /// Reconnects to the database.
+        /// </summary>
+        public void Connect()
+        {
+            _connection.Open();
+        }
+
+        public bool Connected {
+            get {
+                if (_connection.State == ConnectionState.Broken) return false;
+                if (_connection.State == ConnectionState.Closed) return false;
+                return true;
+            }
+            set { _Connected = value; }
+        }
+        private bool _Connected;
+
+
+        public void Disconnect()
+        {
+            _connection.Close();
+        }
+
+        /// <summary>
+        /// Executes a sql-query.
+        /// </summary>
+        /// <param name="SQL">The SQL Query</param>
+        /// <param name="parameters">The Parameters used in the query</param>
+        /// <returns>The return value of the query</returns>
         public string DoQuery(string SQL, KeyValuePair<string, string>[] parameters)
         {
             try

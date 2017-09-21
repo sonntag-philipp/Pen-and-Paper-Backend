@@ -5,6 +5,8 @@ using REST.Shared.Utilities.Contracts;
 using REST.Shared.Controller.Contracts;
 using REST.Shared.Utilities;
 using REST.Shared.Controller;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace REST.Shared.Handler
 {
@@ -29,12 +31,14 @@ namespace REST.Shared.Handler
         }
         private IApiRequest _Request;
 
-
+        /// <summary>
+        /// Handles the /character/ route.
+        /// </summary>
         public CharacterRouteHandler()
         {
             DatabaseController = new MySqlController(new ConfigController().Config);
         }
-
+        
 
         public void Delete(IApiRequest request)
         {
@@ -43,16 +47,42 @@ namespace REST.Shared.Handler
         
         public void Get(IApiRequest request)
         {
+            if (!DatabaseController.Connected) DatabaseController.Connect();
+
             string response = "";
             try
             {
-                response = DatabaseController.DoQuery(
-                    @"SELECT `content` FROM `json_characters` WHERE `unique_name`=@resourceID",
-                    new KeyValuePair<string, string>[]
+                if(request.RequestedResources.Length == 1 || (request.RequestedResources.Length == 2 && request.RequestedResources[1] == ""))
+                {
+                    response = DatabaseController.DoQuery(
+                        @"SELECT `content` FROM `json_characters` WHERE `unique_name`=@resourceID",
+                        new KeyValuePair<string, string>[]
+                        {
+                    new KeyValuePair<string, string>("resourceID", request.RequestedResources[0])
+                        }
+                    );
+                }
+                else
+                {
+                    response = "[";
+                    for (int i = 0; i < request.RequestedResources.Length; i++)
                     {
-                    new KeyValuePair<string, string>("resourceID", request.RequestedResource)
+                        string dbResponse = DatabaseController.DoQuery(
+                            @"SELECT `content` FROM `json_characters` WHERE `unique_name`=@resourceID",
+                            new KeyValuePair<string, string>[]
+                            {
+                                new KeyValuePair<string, string>("resourceID", request.RequestedResources[i])
+                            }
+                        );
+
+                        if(dbResponse != "")
+                        {
+                            response += dbResponse;
+                            if (i != request.RequestedResources.Length - 1) response += ", ";
+                        }
                     }
-                );
+                    response += "]";
+                }
             }
             catch (Exception)
             {
@@ -70,19 +100,25 @@ namespace REST.Shared.Handler
 
         public void Post(IApiRequest request)
         {
+            if (!DatabaseController.Connected) DatabaseController.Connect();
+
             string guid = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
             guid = guid.Replace("=", "");
             guid = guid.Replace("+", "");
             guid = guid.Replace("/", "");
             guid = guid.Substring(0, 6);
 
+            dynamic charJson = JObject.Parse(request.Content);
+            charJson.uid = guid;
+            
+
             try
             {
                 DatabaseController.DoQuery(
                     @"INSERT INTO `json_characters` (`unique_name`, `content`) VALUES (@guid, @character)",
                     new KeyValuePair<string, string>[] {
-                    new KeyValuePair<string, string>("guid", guid),
-                    new KeyValuePair<string, string>("character", request.Content)
+                        new KeyValuePair<string, string>("guid", guid),
+                        new KeyValuePair<string, string>("character", JsonConvert.SerializeObject(charJson))
                     }
                 );
             }
@@ -90,8 +126,12 @@ namespace REST.Shared.Handler
             {
                 throw new ApiException(503);
             }
-            request.Respond("{\"guid\": \"" + guid + "\"}");
-            
+            charJson = null;
+
+            dynamic response = new JObject();
+            response.guid = guid;
+            request.Respond(JsonConvert.SerializeObject(response));
+            response = null;
         }
 
         public void Put(IApiRequest request)

@@ -1,4 +1,6 @@
 ﻿using REST.Shared.Utilities.Contracts;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -7,51 +9,58 @@ namespace REST.Shared.Utilities
 {
     public class ApiRequest : IApiRequest
     {
-        private string _URL;
+        public string[] RequestedResources {
+            get { return _RequestedResources; }
+            private set { _RequestedResources = value; }
+        }
+        private string[] _RequestedResources;
+
+
         public string URL {
             get { return _URL; }
-            set { _URL = value; }
+            private set { _URL = value; }
         }
+        private string _URL;
 
-        private string _RequestedResource;
         public string RequestedResource {
             get { return _RequestedResource; }
-            set { _RequestedResource = value; }
+            private set { _RequestedResource = value; }
         }
+        private string _RequestedResource;
 
-        private string _RequestedTable;
 
         public string RequestedTable {
             get { return _RequestedTable; }
-            set { _RequestedTable = value; }
+            private set { _RequestedTable = value; }
         }
+        private string _RequestedTable;
 
 
-        private string _Method;
         public string Method {
             get { return _Method; }
-            set { _Method = value; }
+            private set { _Method = value; }
         }
+        private string _Method;
 
-        private HttpListenerContext _Context;
         public HttpListenerContext Context {
             get { return _Context; }
             private set { _Context = value; }
         }
+        private HttpListenerContext _Context;
 
-        private string _Content;
 
         public string Content {
             get { return _Content; }
-            set { _Content = value; }
+            private set { _Content = value; }
         }
+        private string _Content;
 
-        private string _Route;
 
         public string Route {
             get { return _Route; }
-            set { _Route = value; }
+            private set { _Route = value; }
         }
+        private string _Route;
 
 
 
@@ -68,11 +77,15 @@ namespace REST.Shared.Utilities
 
             if (Content.Length > 16000) throw new ApiException("Too long request.", 500);
 
-            if(URL.Split('/').Length == 3)
+            string[] splittedURL = URL.Split('/');
+
+            if(splittedURL.Length >= 3)
             {
-                Route = "/" + URL.Split('/')[1] + "/";
-                RequestedResource = URL.Split('/')[2];
-                RequestedTable = URL.Split('/')[1];
+                Route = "/" + splittedURL[1] + "/";
+                RequestedTable = splittedURL[1];
+
+                RequestedResources = new string[splittedURL.Length - 2];
+                Array.Copy(splittedURL, 2, RequestedResources, 0, splittedURL.Length - 2);
             }
         }
         
@@ -116,6 +129,20 @@ namespace REST.Shared.Utilities
         {
             Context.Response.StatusCode = status;
             Context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+
+            Context.Response.OutputStream.Close();
+            Context.Response.Close();
+        }
+
+        public void Respond(int status, KeyValuePair<string, string>[] headers)
+        {
+            Context.Response.StatusCode = status;
+            Context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+            
+            for (int i = 0; i < headers.Length; i++)
+            {
+                Context.Response.AddHeader(headers[i].Key, headers[i].Value);
+            }
 
             Context.Response.OutputStream.Close();
             Context.Response.Close();
